@@ -1,0 +1,156 @@
+\documentclass{article}
+ 
+% Language setting
+% Replace `english' with e.g. `spanish' to change the document language
+\usepackage[english]{babel}
+ 
+% Set page size and margins
+% Replace `letterpaper' with `a4paper' for UK/EU standard size
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+ 
+% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+ 
+\title{Missouri State Employee Overview}
+\author{DataChamps}
+ 
+\begin{document}
+\maketitle
+
+Here is the GitHub URL: 
+\href{https://github.com/srikarmiriyala/MissouriStateEmployeeProject}{Github Repo}
+
+
+\begin{abstract}
+Our goal was to analyze the 2021 Missouri State Employee report. After examining the data set we came up with number of goals we'd want to achieve from a deeper break down of our data set, those being(Total spent on employee salary, Average employee salary, How many employees for each agency, Total income for each agency, Average salary for each agency,and Highest and lowest paid employee). In this report we will go over how we use Pyspark in Jupyterlab, and the steps we took to accomplish those goals. 
+\end{abstract}
+\section{Implementation steps}
+ 
+\subsection{ Imports and Preporation:} 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1.0\linewidth]{1.png}
+    \caption{Implementing Data set and prep}
+    \label{fig:enter-label}
+\end{figure}
+ 
+To start our data manipulation we have to start with our imports and set up. From pyspark.sql was the header for most of our imports and tools use. Adding types and functions to our header allowed for us to use tools like round, DecimalType, DoubleType, desc, asc, exp, max, col.
+ 
+\subsection{Data Formatting:}
+ 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1.0\linewidth]{2.png}
+    \caption{Data Formatting}
+    \label{fig:enter-label}
+\end{figure}
+Before reading in we had to format our data frame to properly be able to handle our cvs file. Our data set has columns being Calendar Year - integertype, Agency Name - stringtype, Position Title - stringtype, Employee Name - stringtype, and  YTD Gross Pay - doubletype. 
+Using df = spark.createDataFrame we were able to pre set the data types we wanted each column to be so that we could manipulate our data set to achieve the goals we set.
+ 
+ 
+\subsection{Reading in Data set:}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1.0\linewidth]{3.png}
+    \caption{Reading data and Sample}
+    \label{fig:enter-label}
+\end{figure}
+Once we are done formatting we can read in our data set and create a temporary view. Using read and format commands we are able to import our data with header attached and store it in a data frame. We create a temp view so that we don't alter our original data as we answer our goals. Lastly we have to check too see if our data is read in properly, using sales.show(truncate=False) we are able to see the full content of our data frame and start working on our goals.
+\section{Goals}
+\subsection{Calculate the total amount spent on employee salary. }
+
+
+To compute the overall expenditure on employee wages, we aggregate "YTD\_Gross\_Pay" data by applying the sum operation using the agg() function. We then format the resulting total using the DecimalType to ensure accuracy.
+This aggregated sum serves as a crucial metric for various purposes, such as budgeting, annual growth analysis, and benchmarking against other states' budgets. It offers valuable insights into how funds are allocated for employee compensation within Missouri's state government, aiding in decision-making and resource distribution. The total amount expended on salaries during the specified period, amounting to \textdollar2,160,391,753.17, indicates a significant volume of financial transactions, underscores the substantial financial commitment towards supporting the state workforce.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1.1\linewidth]{image1.png}
+    \caption{Total amount spent on employee salary}
+    \label{fig:enter-label}
+\end{figure}
+
+
+
+\subsection{Calculate the average amount spent on the employee salary.}
+To derive the average salary per employee, we utilize PySpark's agg() function, aggregating the "YTD Gross Pay" column with the 'avg' method. This computation yields the mean salary across all employees. The result is then converted to DecimalType to ensure accuracy and displayed using the show() function. Understanding the average salary facilitates comparisons among individual salaries and enhances the attraction of potential hires during recruitment. For example, it offers insights into an employee's salary positioning within the organization. In the provided outcome, the average yearly gross pay stands at \textdollar30,628.65. This metric acts as a yardstick for assessing salary competitiveness and informs decisions regarding compensation strategies and recruitment initiatives.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1.1\linewidth]{image2.png}
+    \caption{Average amount spent on the employee salary}
+    \label{fig:enter-label}
+\end{figure}
+
+
+\subsection{Calculate the number of employees for each department.}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\linewidth]{image3.png}
+    \caption{Number of employees for each department.}
+    \label{fig:enter-label}
+\end{figure}
+
+To ascertain the employee count for each agency, we employ PySpark groupBy() function to organize the dataset by "Agency Name" and then utilize the count() function to aggregate the counts. Sorting the outcomes by "Agency Name" furnishes a systematic overview. The resulting data showcases Corrections as the agency with the highest employee count, boasting 12,530 employees. Conversely, OOLG emerges as the agency with the lowest count, employing only 19 individuals. This data sheds light on the distribution of the workforce across various agencies within Missouri's state government, highlighting notable differences in size. Such insights potentially indicate differing staffing needs and organizational structures across agencies. Armed with this knowledge, stakeholders can make informed decisions regarding resource allocation and devise workforce management strategies aimed at bolstering operational efficiency.
+
+\subsection{Calculate the total income for each department}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\linewidth]{image4.png}
+    \caption{Total income for each department}
+    \label{fig:enter-label}
+\end{figure}
+
+To compute the total income per agency, the Missouri state employee dataset undergoes grouping by the "Agency Name" column, followed by aggregation of the "YTD Gross Pay" column's sum. Sorting the results by agency name unveils the total income for each entity. Notably, Corrections stands out with the highest total income of \textdollar382,200,007.47, underscoring its significant financial presence within the state employee payroll. Conversely, the Office of Lieutenant Governor (OOLG) registers the lowest total income at \textdollar886,161.77, indicating its relatively minor financial impact within the dataset. This analysis provides valuable insights into the financial distribution among different agencies, spotlighting those making substantial contributions to the overall income pool and those with more modest financial footprints.
+
+
+
+\subsection{Calculate the average salary for each department.}
+
+To determine the average salary per agency, I utilized PySpark groupBy function to group the data by "Agency Name" and applied the avg function to calculate the average of the "YTD Gross Pay" column. Sorting the results by agency name, I refined the average values by casting them to a DecimalType with precision 20 and scale 2 for enhanced accuracy. Sorting the outcome in descending order by average salary, I found the Office of Governor (OOG) to have the highest average salary at \textdollar52,052.74, while the Agriculture department (Ag) had the lowest at \textdollar13,433.38. The state-wide average salary across all agencies was calculated at \textdollar30,628.65. This analysis underscores substantial variations in average salaries among different agencies, with some significantly exceeding and others falling below the state average. Such insights are pivotal for grasping the financial dynamics within the state employment framework and can serve as valuable inputs for employees and policymakers alike in decision-making processes.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1.1\linewidth]{image5.png}
+    \caption{Average salary for each department}
+    \label{fig:enter-label}
+\end{figure}
+
+
+
+
+\subsection{Calculate the highest and lowest paid employee for each department.}
+
+To determine the highest and lowest-paid employees, we'll analyze the salary data for 2021 Missouri state employees using PySpark. By sorting the dataset based on salary, we can easily identify the employee with the highest salary, likely a psychiatrist or another high-ranking official. Conversely, the lowest-paid employee would be found at the bottom of the sorted list, possibly an entry-level or part-time position within one of the agencies. This analysis provides valuable insights into the salary distribution across different roles within the state government, helping individuals understand the range of earnings potential. Moreover, it offers transparency regarding the financial rewards associated with various positions, aiding in career decision-making and resource allocation within state agencies.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1.2\textwidth]{image6.png} % Replace "image6S.png" with the filename of your image
+  \caption{Highest and lowest paid employee for each department}
+  \label{fig:example}
+\end{figure}
+
+
+\section{Conclusion}
+
+
+In our analysis of 2021 Missouri state employee pay, we found compelling patterns that shed light on the dynamics within different agencies. Firstly, it's evident that the Office of Governor, Office of Lieutenant Governor, and Office of State Treasurer stand out with the highest average salaries, despite having fewer employees and lower total income. This suggests that while they cost less to employ, they offer significant value, making them desirable workplaces, especially for those seeking smaller units with higher median salaries. On the other hand, Corrections, with its large workforce, poses challenges in terms of space and financial resources for operations. Despite being a heavy burden on total income, its position in the middle for average pay makes it less appealing as a workspace, albeit offering ample opportunities for employment.
+
+
+Furthermore, our analysis highlights the prominence of psychiatrists as the top earners among state employees. This finding underscores the potential for substantial financial rewards in pursuing this profession within the state system. Moreover, the revelation of at least 100 employees indebted to the state underscores an important financial aspect that warrants attention and potentially requires measures to address. Overall, these insights provide valuable guidance for both job seekers and policymakers, informing decisions regarding career paths, resource allocation, and financial management within state agencies.
+
+\section{References}
+\begin{itemize}
+    \item https://spark.apache.org/docs/latest/api/python/index.html 
+    \item https://data.mo.gov/dataset/2021-State-Employee-Pay/7j8x-y8ki/about_data 
+    
+    
+\end{itemize}
+ 
+
+
+
+
+
+
+\end{document}
